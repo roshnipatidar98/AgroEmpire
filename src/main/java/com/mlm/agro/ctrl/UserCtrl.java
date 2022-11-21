@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserCtrl {
 	
 	
+	
 	protected void addUser() {
 		
 	}
