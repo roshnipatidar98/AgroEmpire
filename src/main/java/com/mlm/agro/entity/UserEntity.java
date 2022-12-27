@@ -28,6 +28,16 @@ public class UserEntity {
 	private String parentId;
 	@Column
 	private String status;
+	@Column
+	private String role;
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
 
 	public String getUserId() {
 		return userId;
@@ -91,6 +101,13 @@ public class UserEntity {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return "UserEntity [userId=" + userId + ", name=" + name + ", mobileNo=" + mobileNo + ", email=" + email
+				+ ", password=" + password + ", referalLink=" + referalLink + ", parentId=" + parentId + ", status="
+				+ status + ", role=" + role + "]";
 	}
 	
 	

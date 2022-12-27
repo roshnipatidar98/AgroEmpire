@@ -47,7 +47,7 @@ public class RootService {
 		rootEntity.setParentId10(userEntityResultSet.get().getParentId9());
 		
 		List<String> allRootParents = new ArrayList<String>();
-		allRootParents.add(userEntity.getUserId());
+		//allRootParents.add(userEntity.getUserId());
 		allRootParents.add(userEntity.getParentId());
 		allRootParents.add(userEntityResultSet.get().getParentId1());
 		allRootParents.add(userEntityResultSet.get().getParentId2());

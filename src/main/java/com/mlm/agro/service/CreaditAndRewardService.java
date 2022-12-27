@@ -67,8 +67,9 @@ public class CreaditAndRewardService {
 
 			creaditAndRewardEntity.setDiscount(discount);
 			System.out.println("Discount : " + discount);
+		}else {
+		System.out.println(sponsorId+ " is not eligible for any benefits : ");
 		}
-		
 		insertIntoCreaditAndRewardTable(creaditAndRewardEntity);
 	}
 }

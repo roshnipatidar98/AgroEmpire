@@ -16,6 +16,8 @@ public interface UserRepo extends CrudRepository<UserEntity, String>  {
 	
 	@Query("select mobileNo from user  where mobileNo = :title")
 	List findByMobileNo(@Param("title") String title);
+	 
+	@Query("select user from user as user  where user.userId = :title1 and user.password = :title2")
+	UserEntity findByUserAndPassword(@Param("title1") String userId, @Param("title2") String password );
 	
-
 }
