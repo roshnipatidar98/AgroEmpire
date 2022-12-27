@@ -1,22 +1,32 @@
 package com.mlm.agro.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+
+
+@Entity(name = "user")
+@Table(name = "user")
 public class UserEntity {
 	
+	@Id
+	@Column
 	private String userId;
-	
+	@Column
 	private String name;
-	
+	@Column
 	private String mobileNo;
-	
+	@Column
 	private String email;
-	
+	@Column
 	private String password;
-	
+	@Column
 	private String referalLink;
-	
+	@Column
 	private String parentId;
-	
+	@Column
 	private String status;
 
 	public String getUserId() {
