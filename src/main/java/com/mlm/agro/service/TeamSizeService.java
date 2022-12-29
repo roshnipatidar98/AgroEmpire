@@ -7,7 +7,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mlm.agro.entity.RootEntity;
+import com.mlm.agro.dto.UserDto;
 import com.mlm.agro.entity.TeamSizeEntity;
 import com.mlm.agro.repo.TeamSizeRepo;
 
@@ -28,6 +28,7 @@ public class TeamSizeService {
 	return directTeamlist;
 	}
 	
+	
 	public List getInDirectParentTeamList(TeamSizeEntity teamSizeEntity, String sponsorId) {
 		Set<String> setOfIds = new HashSet<String>();
 		List<TeamSizeEntity> inDirectTeamlist = null;
@@ -40,6 +41,15 @@ public class TeamSizeService {
 		}
 		System.out.println("In Direct Team size of "+ sponsorId +" is : "+teamSizeRepo.findBySponsorIds(setOfIds).size());
 		return teamSizeRepo.findBySponsorIds(setOfIds);
+	}
+
+	public boolean updateUserStatus(UserDto userDto) {
+		boolean flag = false;
+		int intFlag = teamSizeRepo.update(userDto.getUserStatus(),userDto.getUserId());
+		if(intFlag ==1) {
+			flag = true;
+		}
+   	return flag;
 	}
 
 }

@@ -31,7 +31,7 @@ public class RootService {
 		return entityResultSet;
 	}
 	
-	public List setRootEntity(RootEntity rootEntity, UserEntity userEntity) {
+	public List getAllRoots(RootEntity rootEntity, UserEntity userEntity) {
 		Optional<RootEntity> userEntityResultSet = findAllParentIds(userEntity);
 		
 		rootEntity.setSponsorId(userEntity.getUserId());

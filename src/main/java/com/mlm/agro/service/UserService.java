@@ -1,7 +1,7 @@
 package com.mlm.agro.service;
 
-import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
@@ -9,20 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mlm.agro.dto.LoginDto;
+import com.mlm.agro.dto.UserDto;
 import com.mlm.agro.entity.RootEntity;
 import com.mlm.agro.entity.TeamSizeEntity;
 import com.mlm.agro.entity.UserEntity;
 import com.mlm.agro.exception.UserRegisterException;
-import com.mlm.agro.repo.RootRepo;
-import com.mlm.agro.repo.TeamSizeRepo;
 import com.mlm.agro.repo.UserRepo;
 
 @Service
 public class UserService {
 	
 	private static final String DIRECT_MEMBER = "DIRECT_MEMBER";
-	private static final String NON_ACTIVE_STATUS  = "N";
-	private static final String CUSTOMER = "CUSTOMER";
+	private static final String NON_ACTIVE_STATUS  = "NON_ACTIVE";
+	private static final String ROLE_CUSTOMER = "CUSTOMER";
 
 	@Autowired
 	private UserRepo userRepo;
@@ -61,21 +60,22 @@ public class UserService {
 
 		userEntity.setReferalLink(null);
 		userEntity.setStatus(NON_ACTIVE_STATUS);
-		userEntity.setRole(CUSTOMER);
+		userEntity.setRole(ROLE_CUSTOMER);
 		rootEntity.setSponsorId(userEntity.getUserId());
 		rootEntity.setParentId1(userEntity.getParentId());
 		teamSizeEntity.setSponsorId(userEntity.getParentId());
 		teamSizeEntity.setChildId(userEntity.getUserId());
 		teamSizeEntity.setChildName(userEntity.getName());
+		teamSizeEntity.setChildStatus(userEntity.getStatus());
 		rootService.insert(rootEntity);
 		userRepo.save(userEntity);
+		teamSizeService.insertIntoTeamSizeTable(teamSizeEntity);
 		if (!DIRECT_MEMBER.equals(userEntity.getParentId())) {
-			List<String> parentIds = rootService.setRootEntity(new RootEntity(), userEntity);
-			teamSizeService.insertIntoTeamSizeTable(teamSizeEntity);
+			List<String> parentIds = rootService.getAllRoots(new RootEntity(), userEntity);
 			for (String parentId : parentIds) {
 				if(parentId != null && !parentId.equals(DIRECT_MEMBER)  ) {
-					List directTeamList = teamSizeService.getDirectParentTeamList(teamSizeEntity, parentId);
-					List inDirectTeamList = teamSizeService.getInDirectParentTeamList(teamSizeEntity, parentId);
+					List<TeamSizeEntity> directTeamList = teamSizeService.getDirectParentTeamList(teamSizeEntity, parentId);
+					List<TeamSizeEntity> inDirectTeamList = teamSizeService.getInDirectParentTeamList(teamSizeEntity, parentId);
 					creaditAndRewardService.setRewardsAndCreadit(directTeamList, inDirectTeamList,
 							parentId);
 				}
@@ -90,6 +90,34 @@ public class UserService {
 
 	System.out.println("User details : " + userDetails);
 	return userDetails;
+	}
+
+
+	public void updateUserStatus(UserDto userDto) throws UserRegisterException {
+		
+		boolean isIdexists = userRepo.existsById(userDto.getUserId());
+		
+		if(isIdexists == true) {
+			UserEntity userEntity = userRepo.findById(userDto.getUserId()).get();
+			userEntity.setUserId(userDto.getUserId());
+			userEntity.setStatus(userDto.getUserStatus());
+			userEntity.setMobileNo(userDto.getMobileNo());
+			userRepo.save(userEntity);
+			if(!(userEntity.getMobileNo().equals(userDto.getMobileNo()))) {
+				throw new UserRegisterException("Mobile No not existss, try again");
+			}
+		}else {
+			throw new UserRegisterException("UserID does not existss, try again"); 
+		}
+		
+		   
+		
+		boolean flag = teamSizeService.updateUserStatus(userDto);
+		
+		if (flag == false) {
+			throw new UserRegisterException("User Status does not changed, try again");
+		}
+		
 	}
 
 }

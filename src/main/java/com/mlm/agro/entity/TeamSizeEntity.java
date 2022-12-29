@@ -16,17 +16,38 @@ public class TeamSizeEntity {
 	private String childName;
 	@Column
 	private String childId;
+	@Column
+	private String childStatus;
 	
+	
+
 	public TeamSizeEntity() {
 		
 	}
 	
-	public TeamSizeEntity(String sponsorId, String childName, String childId) {
+	public TeamSizeEntity(String sponsorId, String childName, String childId, String childStatus) {
 		this.sponsorId = sponsorId;
 		this.childName = childName;
 		this.childId = childId;
+		this.childStatus = childStatus;
 	}
 	
+	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getChildStatus() {
+		return childStatus;
+	}
+
+	public void setChildStatus(String childStatus) {
+		this.childStatus = childStatus;
+	}
 	
 	public String getSponsorId() {
 		return sponsorId;

@@ -10,4 +10,16 @@ public class AgroEmpireApplication {
 		SpringApplication.run(AgroEmpireApplication.class, args);
 	}
 
+	/*   to do list
+	 * 
+	 * update creadit and rewards logic to avoid non active users
+	 * Logic logic
+	 * authentication logic
+	 * roles and their authorities
+	
+	
+	
+	
+	*/
 }
+
