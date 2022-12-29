@@ -99,13 +99,14 @@ public class UserService {
 		
 		if(isIdexists == true) {
 			UserEntity userEntity = userRepo.findById(userDto.getUserId()).get();
+			if(!(userEntity.getMobileNo().equals(userDto.getMobileNo()))) {
+				throw new UserRegisterException("Mobile No not existss, try again");
+			}
 			userEntity.setUserId(userDto.getUserId());
 			userEntity.setStatus(userDto.getUserStatus());
 			userEntity.setMobileNo(userDto.getMobileNo());
 			userRepo.save(userEntity);
-			if(!(userEntity.getMobileNo().equals(userDto.getMobileNo()))) {
-				throw new UserRegisterException("Mobile No not existss, try again");
-			}
+			
 		}else {
 			throw new UserRegisterException("UserID does not existss, try again"); 
 		}
