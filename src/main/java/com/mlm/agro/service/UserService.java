@@ -1,7 +1,7 @@
 package com.mlm.agro.service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
@@ -18,9 +18,9 @@ import com.mlm.agro.repo.UserRepo;
 
 @Service
 public class UserService {
-	
+
 	private static final String DIRECT_MEMBER = "DIRECT_MEMBER";
-	private static final String NON_ACTIVE_STATUS  = "NON_ACTIVE";
+	private static final String NON_ACTIVE_STATUS = "NON_ACTIVE";
 	private static final String ROLE_CUSTOMER = "CUSTOMER";
 
 	@Autowired
@@ -34,7 +34,7 @@ public class UserService {
 
 	@Autowired
 	private CreaditAndRewardService creaditAndRewardService;
-	
+
 	@Autowired
 	private HttpSession session;
 
@@ -70,61 +70,67 @@ public class UserService {
 		rootService.insert(rootEntity);
 		userRepo.save(userEntity);
 		teamSizeService.insertIntoTeamSizeTable(teamSizeEntity);
-		if (!DIRECT_MEMBER.equals(userEntity.getParentId())) {
-			List<String> parentIds = rootService.getAllRoots(new RootEntity(), userEntity);
-			for (String parentId : parentIds) {
-				if(parentId != null && !parentId.equals(DIRECT_MEMBER)  ) {
-					List<TeamSizeEntity> directTeamList = teamSizeService.getDirectTeamList( parentId);
-					List<TeamSizeEntity> inDirectTeamList = teamSizeService.getInDirectTeamList(parentId);
-					creaditAndRewardService.setRewardsAndCreadit(directTeamList, inDirectTeamList,
-							parentId);
-				}
-			}
-		}
+		// if (!DIRECT_MEMBER.equals(userEntity.getParentId())) {
+		// List<String> parentIds = rootService.getAllRoots(new RootEntity(),
+		// userEntity);
+		/*
+		 * for (String parentId : parentIds) { if (parentId != null &&
+		 * !parentId.equals(DIRECT_MEMBER)) { List<TeamSizeEntity> directTeamList =
+		 * teamSizeService.getDirectTeamList(parentId); List<TeamSizeEntity>
+		 * inDirectTeamList = teamSizeService.getInDirectTeamList(parentId);
+		 * creaditAndRewardService.setRewardsAndCreadit(directTeamList,
+		 * inDirectTeamList, parentId); } }
+		 */
+		// }
 	}
-	
 
 	public UserEntity getUser(LoginDto loginDto) {
-	UserEntity userDetails = userRepo.findByUserAndPassword(loginDto.getUserId(), loginDto.getPassword());
-    session.setAttribute("userDetails", userDetails);
+		UserEntity userDetails = userRepo.findByUserAndPassword(loginDto.getUserId(), loginDto.getPassword());
+		session.setAttribute("userDetails", userDetails);
 
-	System.out.println("User details : " + userDetails);
-	return userDetails;
+		System.out.println("User details : " + userDetails);
+		return userDetails;
 	}
 
-
 	public void updateUserStatus(UserDto userDto) throws UserRegisterException {
-		
+
 		boolean isIdexists = userRepo.existsById(userDto.getUserId());
-		
-		if(isIdexists == true) {
+
+		if (isIdexists == true) {
 			UserEntity userEntity = userRepo.findById(userDto.getUserId()).get();
-			if(!(userEntity.getMobileNo().equals(userDto.getMobileNo()))) {
+			if (!(userEntity.getMobileNo().equals(userDto.getMobileNo()))) {
 				throw new UserRegisterException("Mobile No not existss, try again");
 			}
-			userEntity.setUserId(userDto.getUserId());
 			userEntity.setStatus(userDto.getUserStatus());
-			userEntity.setMobileNo(userDto.getMobileNo());
 			userRepo.save(userEntity);
-			
-			List<TeamSizeEntity> directTeamList = teamSizeService.getDirectTeamList( userEntity.getUserId());
-			List<TeamSizeEntity> inDirectTeamList = teamSizeService.getInDirectTeamList( userEntity.getUserId());
-			creaditAndRewardService.setRewardsAndCreadit(directTeamList, inDirectTeamList,
+
+			TeamSizeEntity teamSizeEntity = teamSizeService.findBySponsorIdAndChildID(userEntity.getParentId(),
 					userEntity.getUserId());
-			
-			
-		}else {
-			throw new UserRegisterException("UserID does not existss, try again"); 
+			teamSizeEntity.setChildStatus(userEntity.getStatus());
+			teamSizeService.insertIntoTeamSizeTable(teamSizeEntity);
+			List<String> parentIds = new ArrayList<String>();
+			if (!DIRECT_MEMBER.equals(userEntity.getParentId())) {
+				parentIds = rootService.getAllRoots(new RootEntity(), userEntity);
+				parentIds.add(userEntity.getUserId());
+				for (String parentId : parentIds) {
+					if ((parentId != null && !parentId.equals(DIRECT_MEMBER))) {
+						if (!(userRepo.findById(parentId).get().getStatus().equals(NON_ACTIVE_STATUS))) {
+							List<TeamSizeEntity> directTeamList = teamSizeService.getDirectTeamList(parentId);
+							List<TeamSizeEntity> inDirectTeamList = teamSizeService.getInDirectTeamList(parentId);
+							creaditAndRewardService.setRewardsAndCreadit(directTeamList, inDirectTeamList, parentId);
+						}
+					}
+				}
+			} else {
+				List<TeamSizeEntity> directTeamList = teamSizeService.getDirectTeamList(userEntity.getUserId());
+				List<TeamSizeEntity> inDirectTeamList = teamSizeService.getInDirectTeamList(userEntity.getUserId());
+				creaditAndRewardService.setRewardsAndCreadit(directTeamList, inDirectTeamList, userEntity.getUserId());
+			}
+
+		} else {
+			throw new UserRegisterException("UserID does not existss, try again");
 		}
-		
-		   
-		
-		boolean flag = teamSizeService.updateUserStatus(userDto);
-		
-		if (flag == false) {
-			throw new UserRegisterException("User Status does not changed, try again");
-		}
-		
+
 	}
 
 }

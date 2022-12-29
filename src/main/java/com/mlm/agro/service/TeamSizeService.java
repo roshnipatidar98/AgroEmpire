@@ -18,14 +18,20 @@ public class TeamSizeService {
 	private TeamSizeRepo teamSizeRepo;
 	
 	
-	public void insertIntoTeamSizeTable(TeamSizeEntity teamSizeEntity) {
-		teamSizeRepo.save(teamSizeEntity);
+	public TeamSizeEntity insertIntoTeamSizeTable(TeamSizeEntity teamSizeEntity) {
+		TeamSizeEntity teamSizeRS = teamSizeRepo.save(teamSizeEntity);
+		return teamSizeRS;
 	}
 	
 	public List getDirectTeamList(String sponsorId) {
 	List directTeamlist = teamSizeRepo.findBySponsorId(sponsorId);
 	System.out.println("Direct Team size of "+ sponsorId+" is : "+directTeamlist.size());
 	return directTeamlist;
+	}
+	
+	public TeamSizeEntity findBySponsorIdAndChildID(String sponsorId, String childId) {
+		TeamSizeEntity teamSizeEntity  = teamSizeRepo.findBySponsorIdAndChildID(sponsorId,childId).get(0);
+		return teamSizeEntity;
 	}
 	
 	
@@ -51,5 +57,5 @@ public class TeamSizeService {
 		}
    	return flag;
 	}
-
+	
 }

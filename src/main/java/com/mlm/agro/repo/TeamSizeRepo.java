@@ -27,4 +27,8 @@ public interface TeamSizeRepo extends CrudRepository<TeamSizeEntity, String> {
 	 @Query("update com.mlm.agro.entity.TeamSizeEntity as ts set ts.childStatus = :title1 where ts.childId = :title2")
 	 Integer update(@Param("title1") String childStatus, @Param("title2") String childId);
 
+	 
+	 @Query("select ts from team_size as ts where ts.sponsorId = :title1 and ts.childId = :title2")
+	 List<TeamSizeEntity> findBySponsorIdAndChildID(@Param("title1") String sponsorId,@Param("title2") String childId);
+
 }
