@@ -22,14 +22,14 @@ public class TeamSizeService {
 		teamSizeRepo.save(teamSizeEntity);
 	}
 	
-	public List getDirectParentTeamList(TeamSizeEntity teamSizeEntity, String sponsorId) {
+	public List getDirectTeamList(String sponsorId) {
 	List directTeamlist = teamSizeRepo.findBySponsorId(sponsorId);
 	System.out.println("Direct Team size of "+ sponsorId+" is : "+directTeamlist.size());
 	return directTeamlist;
 	}
 	
 	
-	public List getInDirectParentTeamList(TeamSizeEntity teamSizeEntity, String sponsorId) {
+	public List getInDirectTeamList(String sponsorId) {
 		Set<String> setOfIds = new HashSet<String>();
 		List<TeamSizeEntity> inDirectTeamlist = null;
 		setOfIds.add(sponsorId);

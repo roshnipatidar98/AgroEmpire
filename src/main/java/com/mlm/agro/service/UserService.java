@@ -74,8 +74,8 @@ public class UserService {
 			List<String> parentIds = rootService.getAllRoots(new RootEntity(), userEntity);
 			for (String parentId : parentIds) {
 				if(parentId != null && !parentId.equals(DIRECT_MEMBER)  ) {
-					List<TeamSizeEntity> directTeamList = teamSizeService.getDirectParentTeamList(teamSizeEntity, parentId);
-					List<TeamSizeEntity> inDirectTeamList = teamSizeService.getInDirectParentTeamList(teamSizeEntity, parentId);
+					List<TeamSizeEntity> directTeamList = teamSizeService.getDirectTeamList( parentId);
+					List<TeamSizeEntity> inDirectTeamList = teamSizeService.getInDirectTeamList(parentId);
 					creaditAndRewardService.setRewardsAndCreadit(directTeamList, inDirectTeamList,
 							parentId);
 				}
@@ -106,6 +106,12 @@ public class UserService {
 			userEntity.setStatus(userDto.getUserStatus());
 			userEntity.setMobileNo(userDto.getMobileNo());
 			userRepo.save(userEntity);
+			
+			List<TeamSizeEntity> directTeamList = teamSizeService.getDirectTeamList( userEntity.getUserId());
+			List<TeamSizeEntity> inDirectTeamList = teamSizeService.getInDirectTeamList( userEntity.getUserId());
+			creaditAndRewardService.setRewardsAndCreadit(directTeamList, inDirectTeamList,
+					userEntity.getUserId());
+			
 			
 		}else {
 			throw new UserRegisterException("UserID does not existss, try again"); 
