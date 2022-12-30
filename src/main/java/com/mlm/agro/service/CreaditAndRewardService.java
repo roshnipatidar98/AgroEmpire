@@ -8,6 +8,13 @@ import org.springframework.stereotype.Service;
 import com.mlm.agro.entity.CreaditAndRewardEntity;
 import com.mlm.agro.entity.TeamSizeEntity;
 import com.mlm.agro.repo.CreaditAndRewardRepo;
+import com.mlm.agro.repo.UserRepo;
+import com.mlm.agro.repo.UserRepo;
+import com.mlm.agro.repo.UserRepo;
+import com.mlm.agro.repo.UserRepo;
+import com.mlm.agro.repo.UserRepo;
+import com.mlm.agro.repo.UserRepo;
+import com.mlm.agro.repo.UserRepo;
 
 @Service
 public class CreaditAndRewardService {
@@ -16,8 +23,15 @@ public class CreaditAndRewardService {
 
 	@Autowired
 	private CreaditAndRewardRepo creaditAndRewardRepo;
+	
+	@Autowired
+	private UserRepo userRepo;
 
 	public void insertIntoCreaditAndRewardTable(CreaditAndRewardEntity creaditAndRewardEntity) {
+		creaditAndRewardRepo.save(creaditAndRewardEntity);
+	}
+	
+	public void insertDiscount(CreaditAndRewardEntity creaditAndRewardEntity) {
 		creaditAndRewardRepo.save(creaditAndRewardEntity);
 	}
 
@@ -25,6 +39,10 @@ public class CreaditAndRewardService {
 			String sponsorId) {
 		CreaditAndRewardEntity creaditAndRewardEntity = new CreaditAndRewardEntity();
 		creaditAndRewardEntity.setSponsorId(sponsorId);
+		System.out.println(userRepo.findById(sponsorId).get().getStatus());
+		if(userRepo.findById(sponsorId).get().getStatus().equals(ACTIVE_STATUS)) {
+			creaditAndRewardEntity.setDiscount("10%");
+		}
 		System.out.println("Benefits of : " + sponsorId);
 		int directActiveChildUser = 0;
 		int inDirectActiveChildUser = 0;

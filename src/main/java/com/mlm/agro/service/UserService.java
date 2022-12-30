@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.mlm.agro.dto.LoginDto;
 import com.mlm.agro.dto.UserDto;
+import com.mlm.agro.entity.CreaditAndRewardEntity;
 import com.mlm.agro.entity.RootEntity;
 import com.mlm.agro.entity.TeamSizeEntity;
 import com.mlm.agro.entity.UserEntity;
@@ -106,7 +107,6 @@ public class UserService {
 			}
 			userEntity.setStatus(userDto.getUserStatus());
 			userRepo.save(userEntity);
-
 			TeamSizeEntity teamSizeEntity = teamSizeService.findBySponsorIdAndChildID(userEntity.getParentId(),
 					userEntity.getUserId());
 			teamSizeEntity.setChildStatus(userEntity.getStatus());
