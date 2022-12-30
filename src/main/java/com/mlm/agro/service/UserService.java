@@ -70,9 +70,12 @@ public class UserService {
 		rootService.insert(rootEntity);
 		userRepo.save(userEntity);
 		teamSizeService.insertIntoTeamSizeTable(teamSizeEntity);
+		
+		if (!DIRECT_MEMBER.equals(userEntity.getParentId())) {
+		List<String> parentIds = rootService.getAllRoots(new RootEntity(), userEntity);
+		}
 		// if (!DIRECT_MEMBER.equals(userEntity.getParentId())) {
-		// List<String> parentIds = rootService.getAllRoots(new RootEntity(),
-		// userEntity);
+
 		/*
 		 * for (String parentId : parentIds) { if (parentId != null &&
 		 * !parentId.equals(DIRECT_MEMBER)) { List<TeamSizeEntity> directTeamList =
