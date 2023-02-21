@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity(name = "credit_rewards")
-public class CreaditAndRewardEntity {
+public class CreditAndRewardEntity {
 	
 	@Id
 	@Column

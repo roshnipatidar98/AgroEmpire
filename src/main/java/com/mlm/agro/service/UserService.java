@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.mlm.agro.dto.LoginDto;
 import com.mlm.agro.dto.UserDto;
-import com.mlm.agro.entity.CreaditAndRewardEntity;
 import com.mlm.agro.entity.RootEntity;
 import com.mlm.agro.entity.TeamSizeEntity;
 import com.mlm.agro.entity.UserEntity;
@@ -34,11 +33,12 @@ public class UserService {
 	private TeamSizeService teamSizeService;
 
 	@Autowired
-	private CreaditAndRewardService creaditAndRewardService;
+	private CreditAndRewardService creaditAndRewardService;
 
 	@Autowired
 	private HttpSession session;
 
+	
 	public void addUser(UserEntity userEntity) throws UserRegisterException {
 		System.out.println("service called");
 		RootEntity rootEntity = new RootEntity();

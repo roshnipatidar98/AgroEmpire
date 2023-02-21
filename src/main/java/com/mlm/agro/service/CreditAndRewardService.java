@@ -5,39 +5,33 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mlm.agro.entity.CreaditAndRewardEntity;
+import com.mlm.agro.entity.CreditAndRewardEntity;
 import com.mlm.agro.entity.TeamSizeEntity;
-import com.mlm.agro.repo.CreaditAndRewardRepo;
-import com.mlm.agro.repo.UserRepo;
-import com.mlm.agro.repo.UserRepo;
-import com.mlm.agro.repo.UserRepo;
-import com.mlm.agro.repo.UserRepo;
-import com.mlm.agro.repo.UserRepo;
-import com.mlm.agro.repo.UserRepo;
+import com.mlm.agro.repo.CreditAndRewardRepo;
 import com.mlm.agro.repo.UserRepo;
 
 @Service
-public class CreaditAndRewardService {
+public class CreditAndRewardService {
 
 	private static final String ACTIVE_STATUS = "ACTIVE";
 
 	@Autowired
-	private CreaditAndRewardRepo creaditAndRewardRepo;
+	private CreditAndRewardRepo creaditAndRewardRepo;
 	
 	@Autowired
 	private UserRepo userRepo;
 
-	public void insertIntoCreaditAndRewardTable(CreaditAndRewardEntity creaditAndRewardEntity) {
+	public void insertIntoCreaditAndRewardTable(CreditAndRewardEntity creaditAndRewardEntity) {
 		creaditAndRewardRepo.save(creaditAndRewardEntity);
 	}
 	
-	public void insertDiscount(CreaditAndRewardEntity creaditAndRewardEntity) {
+	public void insertDiscount(CreditAndRewardEntity creaditAndRewardEntity) {
 		creaditAndRewardRepo.save(creaditAndRewardEntity);
 	}
 
 	public void setRewardsAndCreadit(List<TeamSizeEntity> directTeamList, List<TeamSizeEntity> inDirectTeamList,
 			String sponsorId) {
-		CreaditAndRewardEntity creaditAndRewardEntity = new CreaditAndRewardEntity();
+		CreditAndRewardEntity creaditAndRewardEntity = new CreditAndRewardEntity();
 		creaditAndRewardEntity.setSponsorId(sponsorId);
 		System.out.println(userRepo.findById(sponsorId).get().getStatus());
 		if(userRepo.findById(sponsorId).get().getStatus().equals(ACTIVE_STATUS)) {
@@ -106,6 +100,16 @@ public class CreaditAndRewardService {
 			System.out.println(sponsorId + " is not eligible for any benefits : ");
 		}
 		insertIntoCreaditAndRewardTable(creaditAndRewardEntity);
+	}
+
+	public List getRewards(String sponsorId) {
+		List list = creaditAndRewardRepo.findMyRewards(sponsorId);
+		return list;
+	}
+	
+	public List getCreditLimit(String sponsorId) {
+		List list = creaditAndRewardRepo.findMyCreditLimit(sponsorId);
+		return list;
 	}
 
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mlm.agro.config.APIConstants;
 import com.mlm.agro.dto.LoginDto;
 import com.mlm.agro.dto.UserDto;
 import com.mlm.agro.entity.UserEntity;
@@ -25,7 +26,7 @@ public class UserCtrl {
 // private RootService rootService;
  
  
-   @PostMapping("/registerUser")
+   @PostMapping(APIConstants.REGISTER_USER)
 	protected ResponseEntity addUser(@RequestBody UserEntity entity) {
 	   System.out.println("controller called");
 	   try {
@@ -44,7 +45,7 @@ public class UserCtrl {
 		return new ResponseEntity("User signed-up successfully!.", HttpStatus.OK);
 	}
    
-   @PutMapping("/changeUserStatus")
+   @PutMapping(APIConstants.CHANGE_USER_STATUS)
    protected ResponseEntity updateUserStatus(@RequestBody UserDto userDto) {
 	   try {
 		userService.updateUserStatus(userDto);
@@ -62,7 +63,7 @@ public class UserCtrl {
 	   
    }
 	
-   @PostMapping("/signinUser")
+   @PostMapping(APIConstants.LOGIN_USER)
 	protected ResponseEntity<UserEntity> loginUser(@RequestBody LoginDto loginDto) {
 	   UserEntity UserEntity = userService.getUser(loginDto);
 	return new ResponseEntity("User signed-In successfully!.", HttpStatus.OK);
