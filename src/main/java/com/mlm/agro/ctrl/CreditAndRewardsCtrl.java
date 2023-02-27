@@ -36,14 +36,14 @@ public class CreditAndRewardsCtrl {
 	}
   
   
-  @PostMapping
-  protected void updateRewards() {
-	  
-  }
-  
-  @PostMapping
-  protected void updateCreditLimit() {
-	  
-  }
+	/*
+	 * @PostMapping protected void updateRewards() {
+	 * 
+	 * }
+	 * 
+	 * @PostMapping protected void updateCreditLimit() {
+	 * 
+	 * }
+	 */
 
 }
