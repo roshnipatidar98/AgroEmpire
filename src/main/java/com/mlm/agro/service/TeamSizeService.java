@@ -46,6 +46,7 @@ public class TeamSizeService {
 			 }
 		}
 		System.out.println("In Direct Team size of "+ sponsorId +" is : "+teamSizeRepo.findBySponsorIds(setOfIds).size());
+		List finalListWithoutId = teamSizeRepo.findBySponsorIds(setOfIds);
 		return teamSizeRepo.findBySponsorIds(setOfIds);
 	}
 

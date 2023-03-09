@@ -1,6 +1,5 @@
 package com.mlm.agro.ctrl;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.http.HttpStatus;
@@ -15,7 +14,6 @@ import com.mlm.agro.dto.LoginDto;
 import com.mlm.agro.dto.UserDto;
 import com.mlm.agro.entity.UserEntity;
 import com.mlm.agro.exception.UserRegisterException;
-import com.mlm.agro.reponse.handle.CustomResponse;
 import com.mlm.agro.service.UserService;
 
 @RestController
@@ -35,27 +33,24 @@ public class UserCtrl {
 	   System.out.println("controller called");
 	   try {
 		   userService.addUser(entity);
-		  
+		   return ResponseEntity.status(HttpStatus.CREATED).build();
 	   }catch(Exception exception) {
 		   if(exception instanceof UserRegisterException) {
 			   System.out.println("Ctrl catched exception : " + exception.getMessage() );
-			   return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
+			   return new ResponseEntity(exception.getMessage(), HttpStatus.FORBIDDEN);
 		   }else {
 			   System.out.println("Runtime exception : " + exception.getMessage()); 
 			   return new ResponseEntity("Server error", HttpStatus.SERVICE_UNAVAILABLE);
 		   }
-		   
 	   }
-	  // String json = "{\"name\":\"John\",\"age\":\"30\"}";
-	   CustomResponse reposne = new CustomResponse();
-	   reposne.setMessage("Success");
-	   String json = "{\"message\" : \"Sucess\"}";
-	   JSONObject jsonObj = new JSONObject(reposne);
-	   System.out.println(jsonObj);
-	   jsonObj.put("mess", "Success");
-	   return ResponseEntity.status(200).body(jsonObj);
-	//	return new ResponseEntity("User signed-up successfully!.", HttpStatus.OK);
-	}
+		/*
+		 * // String json = "{\"name\":\"John\",\"age\":\"30\"}"; // CustomResponse
+		 * reposne = new CustomResponse(); reposne.setMessage("Success"); String json =
+		 * "{\"message\" : \"Sucess\"}"; JSONObject jsonObj = new JSONObject();
+		 * System.out.println(jsonObj); jsonObj.put("mess", "Success"); // return
+		 * ResponseEntity.status(HttpStatus.CREATED).build(); // return new
+		 * ResponseEntity("User signed-up successfully!.", HttpStatus.OK);
+		 */	}
    
    @PutMapping(APIConstants.CHANGE_USER_STATUS)
    protected ResponseEntity updateUserStatus(@RequestBody UserDto userDto) {
